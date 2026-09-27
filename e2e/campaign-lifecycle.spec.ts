@@ -7,7 +7,7 @@ test.describe('Campaign Lifecycle', () => {
       (window as any).freighter = {
         isConnected: () => Promise.resolve(true),
         requestAccess: () =>
-          Promise.resolve('GBAF7Y6PJY6PY6PY6PY6PY6PY6PY6PY6PY6PY6PY6PY6PY6PY6PY6PY'),
+          Promise.resolve('GDOGOQQQWCIPOHLIYHQIVI5HKYHYI6IDBGRW245JZC623TVFFKFQZCKQ'),
         getNetworkDetails: () =>
           Promise.resolve({
             networkPassphrase: 'Test SDF Network ; September 2015',
@@ -23,7 +23,7 @@ test.describe('Campaign Lifecycle', () => {
   }) => {
     const dashboard = new DashboardPage(page);
     const campaignTitle = `E2E Campaign ${Date.now()}`;
-    const creator = 'GBAF7Y6PJY6PY6PY6PY6PY6PY6PY6PY6PY6PY6PY6PY6PY6PY6PY6PY';
+    const creator = 'GDOGOQQQWCIPOHLIYHQIVI5HKYHYI6IDBGRW245JZC623TVFFKFQZCKQ';
 
     await dashboard.goto();
 

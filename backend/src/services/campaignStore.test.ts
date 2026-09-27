@@ -24,9 +24,9 @@ let getCampaignHistory: EventHistoryModule['getCampaignHistory'];
 let addPledge: CampaignStoreModule['addPledge'];
 let getCampaignAnalytics: CampaignStoreModule['getCampaignAnalytics'];
 
-const CREATOR = `G${'A'.repeat(55)}`;
-const CONTRIBUTOR = `G${'B'.repeat(55)}`;
-const CONTRIBUTOR2 = `G${'C'.repeat(55)}`;
+const CREATOR = 'GDOGOQQQWCIPOHLIYHQIVI5HKYHYI6IDBGRW245JZC623TVFFKFQZCKQ';
+const CONTRIBUTOR = 'GBBXILIJHRPV2GWBGPQLWSGR57FO6OODNMBZB5EUKBFX3MRINA7NMKUI';
+const CONTRIBUTOR2 = 'GBJI32M2VAAYQU3S6LOXCWNIOCXG7I2I3J3JO3XPT5PEYXL72W3QNOMU';
 const TX_HASH = 'a'.repeat(64);
 
 beforeAll(async () => {
@@ -121,7 +121,7 @@ describe('on-chain pledge reconciliation', () => {
       confirmedAt: futureDeadline - 300,
     });
 
-    expect(updatedCampaign.pledgedAmount).toBe(25.5);
+    expect(updatedCampaign.campaign.pledgedAmount).toBe(25.5);
     expect(getCampaign(campaign.id)?.pledgedAmount).toBe(25.5);
 
     const pledges = getPledges(campaign.id);

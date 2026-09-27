@@ -3,9 +3,25 @@ import path from 'path';
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 
+vi.mock('./services/sorobanRpc', () => ({
+  ensureSorobanRefundConfig: vi.fn(),
+}));
+vi.mock('./services/eventIndexer', () => ({
+  getIndexerStatus: vi.fn().mockReturnValue({
+    lastSuccessfulPollTime: Date.now(),
+    lastKnownLedger: 1,
+    isHealthy: true,
+    consecutiveFailures: 0,
+    lagMs: 0,
+  }),
+  startEventIndexer: vi.fn(),
+  stopEventIndexer: vi.fn(),
+}));
+
 import type { Express } from 'express';
 
 import { REQUEST_ID_HEADER } from './middleware/requestId';
+import { logger } from './logger';
 
 const TEST_DB_PATH = path.join(
   '/tmp',
@@ -49,16 +65,16 @@ describe('request id middleware', () => {
   });
 
   it('includes request id in structured request logs', async () => {
-    const infoSpy = vi.spyOn(console, 'info').mockImplementation(() => undefined);
+    const infoSpy = vi.spyOn(logger, 'info').mockImplementation(() => undefined);
 
     await request(app).get('/api/health').set(REQUEST_ID_HEADER, 'log-context-request-id');
 
-    const loggedLine = infoSpy.mock.calls
-      .map(([message]) => String(message))
-      .find((message) => message.includes('http_request'));
+    const httpRequestCall = infoSpy.mock.calls
+      .map(([payload]) => payload as { event?: string; requestId?: string })
+      .find((payload) => payload?.event === 'http_request');
 
-    expect(loggedLine).toBeDefined();
-    expect(loggedLine).toContain('log-context-request-id');
+    expect(httpRequestCall).toBeDefined();
+    expect(httpRequestCall?.requestId).toBe('log-context-request-id');
 
     infoSpy.mockRestore();
   });
